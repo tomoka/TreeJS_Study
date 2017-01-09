@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>無題ドキュメント</title>
+</head>
+
+<body>
+
+<script src="../three.js/build/three.min.js"></script>
+<script src="../three.js/src/lights/LightShadow.js"></script>
+
+		<script>
+		var scene, camera, renderer, helper;
+		var geometry, material, mesh, light;
+		var planeGeometry, planeMaterial, plane;
+
+		init();
+		animate();
+
+		function init() {
+
+			scene = new THREE.Scene();
+
+			camera = new THREE.PerspectiveCamera( 3, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.position.z = 1000;
+								
+			renderer = new THREE.WebGLRenderer();
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+			
+			//Create a PointLight and turn on shadows for the light
+			light = new THREE.PointLight( 0xffffff, 1, 50 );
+			light.position.set( 10,20,0 );
+			light.castShadow = true;            // default false
+			scene.add( light );
+
+			//Set up shadow properties for the light
+			light.shadow.mapSize.width = 40;  // default
+			light.shadow.mapSize.height = 40; // default
+			light.shadow.camera.near = 1;       // default
+			light.shadow.camera.far = 40;    // default
+
+			geometry = new THREE.SphereGeometry( 5, 32, 32 );
+			material = new THREE.MeshBasicMaterial( { color: 0xcc3366, depthWrite: true, wireframe: true } );
+
+			mesh = new THREE.Mesh( geometry, material );
+			mesh.castShadow = true;
+			mesh.receiveShadow = true;
+			scene.add( mesh );
+
+			//Create a plane that receives shadows (but does not cast them)
+			/*planeGeometry = new THREE.PlaneBufferGeometry( 20, 20, 32, 32 );
+			planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } );
+			plane = new THREE.Mesh( planeGeometry, planeMaterial );
+			plane.receiveShadow = true;
+			scene.add( plane );*/
+			
+			//Create a helper for the shadow camera (optional)
+			helper = new THREE.CameraHelper( light.shadow.camera );
+			scene.add( helper );
+
+			renderer.setSize( window.innerWidth, window.innerHeight );
+
+			document.body.appendChild( renderer.domElement );
+
+		}
+
+		function animate() {
+
+			requestAnimationFrame( animate );
+
+			mesh.rotation.x += 0.001;
+			mesh.rotation.y += 0.002;
+
+			renderer.render( scene, camera );
+
+		}
+	</script>
+
+</body>
+</html>
