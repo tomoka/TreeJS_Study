@@ -8,7 +8,6 @@
 <body>
 
 <script src="three.min.js"></script>
-<script src="LightShadow.js"></script>
 
 		<script>
 		var scene, camera, renderer, helper;
@@ -31,7 +30,7 @@
 			
 			// 物体を用意
 			geometry = new THREE.SphereGeometry(10, 10, 10);
-			material = new THREE.MeshLambertMaterial( { color: 0xffffff } )
+			material = new THREE.MeshLambertMaterial( { color: 0xffffff,opacity:0.5} )
 			mesh = new THREE.Mesh( geometry, material );
 			mesh.rotation.x = 0.5;
 			mesh.rotation.y = 0.5;
